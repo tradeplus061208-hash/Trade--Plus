@@ -220,7 +220,7 @@ class _TradePlusScreenState extends State<TradePlusScreen> {
                 const SizedBox(height: 8),
                 const Center(
                   child: Text(
-                    "👉 Swipe left/right for MT5 Real Candles (Past 50 & Future 100)",
+                    "👉 Swipe left/right for MT5 Real Candles",
                     style: TextStyle(color: Colors.cyanAccent, fontSize: 11),
                     textAlign: TextAlign.center,
                   ),
@@ -311,7 +311,6 @@ class _TradePlusScreenState extends State<TradePlusScreen> {
             ),
             const SizedBox(height: 16),
 
-            // Uploaded Image View with Full Pan & Zoom Support
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -349,7 +348,6 @@ class _TradePlusScreenState extends State<TradePlusScreen> {
                           ],
                         )
                       : InteractiveViewer(
-                          // ဇူးမ်ဆွဲခြင်းနှင့် အပေါ်အောက်၊ ဘယ်ညာရွှေ့ခြင်း (Pan & Zoom) ကို အပြည့်အဝ ခွင့်ပြုထားသည်
                           panEnabled: true,
                           scaleEnabled: true,
                           minScale: 0.5,
@@ -364,16 +362,6 @@ class _TradePlusScreenState extends State<TradePlusScreen> {
                 ),
               ),
             ),
-            if (uploadedImageUrl != null)
-              const Padding(
-                padding: EdgeInsets.only(top: 4.0),
-                child: Center(
-                  child: Text(
-                    "👉 You can now pinch-to-zoom and drag/pan freely in all directions.",
-                    style: TextStyle(color: Colors.cyanAccent, fontSize: 10, fontStyle: FontStyle.italic),
-                  ),
-                ),
-              ),
             const SizedBox(height: 16),
 
             ElevatedButton.icon(
@@ -416,7 +404,7 @@ class _TradePlusScreenState extends State<TradePlusScreen> {
 
             if (showResults) ...[
               const Text(
-                "Best Historical Matches (Tap card for Full Screen):",
+                "Best Historical Matches:",
                 style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 15),
               ),
               const SizedBox(height: 12),
@@ -432,13 +420,6 @@ class _TradePlusScreenState extends State<TradePlusScreen> {
                         color: const Color(0xFF1E293B),
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(color: const Color(0xFF10B981).withOpacity(0.6), width: 1.5),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.3),
-                            blurRadius: 8,
-                            offset: const Offset(0, 4),
-                          ),
-                        ],
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -479,13 +460,6 @@ class _TradePlusScreenState extends State<TradePlusScreen> {
                               painter: MT5ChartPainter(candles: previewCandles),
                             ),
                           ),
-                          const SizedBox(height: 6),
-                          const Center(
-                            child: Text(
-                              "🔍 Tap to view full screen interactive MT5 chart", 
-                              style: TextStyle(color: Colors.cyanAccent, fontSize: 10, fontStyle: FontStyle.italic),
-                            ),
-                          ),
                         ],
                       ),
                     ),
@@ -509,4 +483,60 @@ class MT5ChartPainter extends CustomPainter {
     if (candles.isEmpty) return;
 
     final paintBullish = Paint()..color = const Color(0xFF00B57A)..style = PaintingStyle.fill;
-    final paintBearish = Paint()..color = const Color(0xFFFF3B30)..
+    final paintBearish = Paint()..color = const Color(0xFFFF3B30)..style = PaintingStyle.fill;
+    final paintHighlight = Paint()..color = const Color(0xFFFFB800)..style = PaintingStyle.fill;
+
+    final wickBullish = Paint()..color = const Color(0xFF00B57A)..strokeWidth = 1.2;
+    final wickBearish = Paint()..color = const Color(0xFFFF3B30)..strokeWidth = 1.2;
+    final wickHighlight = Paint()..color = const Color(0xFFFFB800)..strokeWidth = 1.8;
+
+    final gridPaint = Paint()..color = Colors.white.withOpacity(0.05)..strokeWidth = 0.5;
+    for (double y = 0; y < size.height; y += 25) {
+      canvas.drawLine(Offset(0, y), Offset(size.width, y), gridPaint);
+    }
+
+    double minPrice = candles.first.low;
+    double maxPrice = candles.first.high;
+    for (var c in candles) {
+      if (c.low < minPrice) minPrice = c.low;
+      if (c.high > maxPrice) maxPrice = c.high;
+    }
+
+    double priceRange = (maxPrice - minPrice) == 0 ? 1.0 : (maxPrice - minPrice);
+    double candleWidth = size.width / candles.length;
+
+    for (int i = 0; i < candles.length; i++) {
+      final c = candles[i];
+      final x = i * candleWidth + candleWidth / 2;
+
+      double getY(double price) {
+        return size.height - ((price - minPrice) / priceRange * (size.height - 30) + 15);
+      }
+
+      bool isBullish = c.close >= c.open;
+      Paint bodyPaint = c.isMatched ? paintHighlight : (isBullish ? paintBullish : paintBearish);
+      Paint wickPaint = c.isMatched ? wickHighlight : (isBullish ? wickBullish : wickBearish);
+
+      double highY = getY(c.high);
+      double lowY = getY(c.low);
+      double openY = getY(c.open);
+      double closeY = getY(c.close);
+
+      canvas.drawLine(Offset(x, highY), Offset(x, lowY), wickPaint);
+
+      double top = openY < closeY ? openY : closeY;
+      double bottom = openY > closeY ? openY : closeY;
+      double bodyHeight = bottom - top;
+      if (bodyHeight < 2.0) bodyHeight = 2.0;
+
+      double rectWidth = (candleWidth * 0.65).clamp(3.0, 10.0);
+      canvas.drawRect(
+        Rect.fromLTWH(x - rectWidth / 2, top, rectWidth, bodyHeight),
+        bodyPaint,
+      );
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
+}
