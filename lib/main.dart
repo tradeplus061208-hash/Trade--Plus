@@ -32,9 +32,9 @@ class DashboardScreen extends StatefulWidget {
 
 class _DashboardScreenState extends State<DashboardScreen> {
   final double _balance = 24500.50;
-
-  final List> _watchlist = [
-    {'name': 'Bitcoin', 'symbol': 'BTC/USDT', 'price': r'$67,420.00', 'change': '+3.45%', 'isUp': true},
+  
+  final _watchlist = [
+ {'name': 'Bitcoin', 'symbol': 'BTC/USDT', 'price': r'$67,420.00', 'change': '+3.45%', 'isUp': true},
     {'name': 'Ethereum', 'symbol': 'ETH/USDT', 'price': r'$3,550.25', 'change': '+1.82%', 'isUp': true},
     {'name': 'Tesla', 'symbol': 'TSLA', 'price': r'$245.10', 'change': '-0.65%', 'isUp': false},
     {'name': 'Apple', 'symbol': 'AAPL', 'price': r'$182.30', 'change': '+0.92%', 'isUp': true},
@@ -92,7 +92,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   const Text('Total Balance', style: TextStyle(color: Colors.white60, fontSize: 14)),
                   const SizedBox(height: 8),
                   Text(
-                    '\$${_balance.toStringAsFixed(2)}',
+                    r'$' '${_balance.toStringAsFixed(2)}',
                     style: const TextStyle(color: Colors.white, fontSize: 28, fontWeight: FontWeight.bold),
                   ),
                 ],
