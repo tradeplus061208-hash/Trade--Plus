@@ -31,8 +31,7 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
-  int _currentIndex = 0;
-  double _balance = 24500.50;
+  final double _balance = 24500.50;
 
   final List> _watchlist = [
     {'name': 'Bitcoin', 'symbol': 'BTC/USDT', 'price': r'$67,420.00', 'change': '+3.45%', 'isUp': true},
@@ -110,7 +109,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 final item = _watchlist[index];
                 return Card(
                   color: const Color(0xFF1E293B),
-                  margin: constنیز const EdgeInsets.only(bottom: 8),
+                  margin: const EdgeInsets.only(bottom: 8),
                   child: ListTile(
                     title: Text(item['name'], style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
                     subtitle: Text(item['symbol'], style: const TextStyle(color: Colors.white60)),
