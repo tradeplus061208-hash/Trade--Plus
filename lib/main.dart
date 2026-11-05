@@ -33,7 +33,7 @@ class DashboardScreen extends StatefulWidget {
 class _DashboardScreenState extends State<DashboardScreen> {
   final double _balance = 24500.50;
 
-  final var _watchlist = [
+  final _watchlist = [
     {'name': 'Bitcoin', 'symbol': 'BTC/USDT', 'price': r'$67,420.00', 'change': '+3.45%', 'isUp': true},
     {'name': 'Ethereum', 'symbol': 'ETH/USDT', 'price': r'$3,550.25', 'change': '+1.82%', 'isUp': true},
     {'name': 'Tesla', 'symbol': 'TSLA', 'price': r'$245.10', 'change': '-0.65%', 'isUp': false},
@@ -111,17 +111,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   color: const Color(0xFF1E293B),
                   margin: const EdgeInsets.only(bottom: 8),
                   child: ListTile(
-                    title: Text(item['name'] as String, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-                    subtitle: Text(item['symbol'] as String, style: const TextStyle(color: Colors.white60)),
+                    title: Text(item['name'].toString(), style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                    subtitle: Text(item['symbol'].toString(), style: const TextStyle(color: Colors.white60)),
                     trailing: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        Text(item['price'] as String, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-                        Text(item['change'] as String, style: TextStyle(color: (item['isUp'] as bool) ? Colors.green : Colors.red)),
+                        Text(item['price'].toString(), style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                        Text(item['change'].toString(), style: TextStyle(color: (item['isUp'] == true) ? Colors.green : Colors.red)),
                       ],
                     ),
-                    onTap: () => _executeTrade(item['symbol'] as String),
+                    onTap: () => _executeTrade(item['symbol'].toString()),
                   ),
                 );
               },
