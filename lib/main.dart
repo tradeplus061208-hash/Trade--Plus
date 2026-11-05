@@ -35,12 +35,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
   double _balance = 24580.50;
   
   final List> _watchlist = [
-    {'name': 'Bitcoin', 'symbol': 'BTC/USDT', 'price': '$67,420.00', 'change': '+3.45%', 'isUp': true},
-    {'name': 'Ethereum', 'symbol': 'ETH/USDT', 'price': '$3,550.25', 'change': '+1.82%', 'isUp': true},
-    {'name': 'Tesla', 'symbol': 'TSLA', 'price': '$245.10', 'change': '-0.65%', 'isUp': false},
-    {'name': 'Apple', 'symbol': 'AAPL', 'price': '$182.30', 'change': '+0.92%', 'isUp': true},
-    {'name': 'Gold', 'symbol': 'XAU/USD', 'price': '$2,340.80', 'change': '+0.41%', 'isUp': true},
+      final List> _watchlist = [
+    {'name': 'Bitcoin', 'symbol': 'BTC/USDT', 'price': r'$67,420.00', 'change': '+3.45%', 'isUp': true},
+    {'name': 'Ethereum', 'symbol': 'ETH/USDT', 'price': r'$3,550.25', 'change': '+1.82%', 'isUp': true},
+    {'name': 'Tesla', 'symbol': 'TSLA', 'price': r'$245.10', 'change': '-0.65%', 'isUp': false},
+    {'name': 'Apple', 'symbol': 'AAPL', 'price': r'$182.30', 'change': '+0.92%', 'isUp': true},
+    {'name': 'Gold', 'symbol': 'XAU/USD', 'price': r'$2,340.80', 'change': '+0.41%', 'isUp': true},
   ];
+
 
   void _executeTrade(String assetSymbol) {
     showDialog(
